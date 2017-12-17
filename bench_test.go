@@ -214,13 +214,18 @@ func BenchmarkMartini_Param(b *testing.B) {
 	r, _ := http.NewRequest("GET", "/user/gordon", nil)
 	benchRequest(b, router, r)
 }
+func BenchmarkMux2_Param(b *testing.B) {
+	router := loadMux2Single("GET", "/user/:name", http.HandlerFunc(httpHandlerFunc))
+
+	r, _ := http.NewRequest("GET", "/user/gordon", nil)
+	benchRequest(b, router, r)
+}
 func BenchmarkPat_Param(b *testing.B) {
 	router := loadPatSingle("GET", "/user/:name", http.HandlerFunc(httpHandlerFunc))
 
 	r, _ := http.NewRequest("GET", "/user/gordon", nil)
 	benchRequest(b, router, r)
 }
-
 func BenchmarkPossum_Param(b *testing.B) {
 	router := loadPossumSingle("GET", "/user/:name", possumHandler)
 
@@ -401,6 +406,13 @@ func BenchmarkMartini_Param5(b *testing.B) {
 	r, _ := http.NewRequest("GET", fiveRoute, nil)
 	benchRequest(b, router, r)
 }
+func BenchmarkMux2_Param5(b *testing.B) {
+	router := loadMux2Single("GET", fiveColon, http.HandlerFunc(httpHandlerFunc))
+
+	r, _ := http.NewRequest("GET", fiveRoute, nil)
+	benchRequest(b, router, r)
+}
+
 func BenchmarkPat_Param5(b *testing.B) {
 	router := loadPatSingle("GET", fiveColon, http.HandlerFunc(httpHandlerFunc))
 
@@ -587,6 +599,12 @@ func BenchmarkMartini_Param20(b *testing.B) {
 	r, _ := http.NewRequest("GET", twentyRoute, nil)
 	benchRequest(b, router, r)
 }
+func BenchmarkMux2_Param20(b *testing.B) {
+	router := loadMux2Single("GET", twentyColon, http.HandlerFunc(httpHandlerFunc))
+
+	r, _ := http.NewRequest("GET", twentyRoute, nil)
+	benchRequest(b, router, r)
+}
 func BenchmarkPat_Param20(b *testing.B) {
 	router := loadPatSingle("GET", twentyColon, http.HandlerFunc(httpHandlerFunc))
 
@@ -769,6 +787,13 @@ func BenchmarkMartini_ParamWrite(b *testing.B) {
 	r, _ := http.NewRequest("GET", "/user/gordon", nil)
 	benchRequest(b, router, r)
 }
+func BenchmarkMux2_ParamWrite(b *testing.B) {
+	router := loadMux2Single("GET", "/user/:name", http.HandlerFunc(mux2HandlerWrite))
+
+	r, _ := http.NewRequest("GET", "/user/gordon", nil)
+	benchRequest(b, router, r)
+}
+
 func BenchmarkPat_ParamWrite(b *testing.B) {
 	router := loadPatSingle("GET", "/user/:name", http.HandlerFunc(patHandlerWrite))
 

@@ -31,6 +31,7 @@ var (
 		{"LARS", loadLARS},
 		{"Macaron", loadMacaron},
 		{"Martini", loadMartini},
+		{"Mux2", loadMux2},
 		{"Pat", loadPat},
 		{"Possum", loadPossum},
 		{"R2router", loadR2router},

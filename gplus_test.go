@@ -55,6 +55,7 @@ var (
 	gplusLARS        http.Handler
 	gplusMacaron     http.Handler
 	gplusMartini     http.Handler
+	gplusMux2        http.Handler
 	gplusPat         http.Handler
 	gplusPossum      http.Handler
 	gplusR2router    http.Handler
@@ -126,6 +127,9 @@ func init() {
 	})
 	calcMem("Martini", func() {
 		gplusMartini = loadMartini(gplusAPI)
+	})
+	calcMem("Mux2", func() {
+		gplusMux2 = loadMux2(gplusAPI)
 	})
 	calcMem("Pat", func() {
 		gplusPat = loadPat(gplusAPI)
@@ -237,6 +241,10 @@ func BenchmarkMacaron_GPlusStatic(b *testing.B) {
 func BenchmarkMartini_GPlusStatic(b *testing.B) {
 	req, _ := http.NewRequest("GET", "/people", nil)
 	benchRequest(b, gplusMartini, req)
+}
+func BenchmarkMux2_GPlusStatic(b *testing.B) {
+	req, _ := http.NewRequest("GET", "/people", nil)
+	benchRequest(b, gplusMux2, req)
 }
 func BenchmarkPat_GPlusStatic(b *testing.B) {
 	req, _ := http.NewRequest("GET", "/people", nil)
@@ -357,6 +365,10 @@ func BenchmarkMartini_GPlusParam(b *testing.B) {
 	req, _ := http.NewRequest("GET", "/people/118051310819094153327", nil)
 	benchRequest(b, gplusMartini, req)
 }
+func BenchmarkMux2_GPlusParam(b *testing.B) {
+	req, _ := http.NewRequest("GET", "/people/118051310819094153327", nil)
+	benchRequest(b, gplusMux2, req)
+}
 func BenchmarkPat_GPlusParam(b *testing.B) {
 	req, _ := http.NewRequest("GET", "/people/118051310819094153327", nil)
 	benchRequest(b, gplusPat, req)
@@ -476,6 +488,10 @@ func BenchmarkMartini_GPlus2Params(b *testing.B) {
 	req, _ := http.NewRequest("GET", "/people/118051310819094153327/activities/123456789", nil)
 	benchRequest(b, gplusMartini, req)
 }
+func BenchmarkMux2_GPlus2Params(b *testing.B) {
+	req, _ := http.NewRequest("GET", "/people/118051310819094153327/activities/123456789", nil)
+	benchRequest(b, gplusMux2, req)
+}
 func BenchmarkPat_GPlus2Params(b *testing.B) {
 	req, _ := http.NewRequest("GET", "/people/118051310819094153327/activities/123456789", nil)
 	benchRequest(b, gplusPat, req)
@@ -575,6 +591,9 @@ func BenchmarkMacaron_GPlusAll(b *testing.B) {
 }
 func BenchmarkMartini_GPlusAll(b *testing.B) {
 	benchRoutes(b, gplusMartini, gplusAPI)
+}
+func BenchmarkMux2_GPlusAll(b *testing.B) {
+	benchRoutes(b, gplusMux2, gplusAPI)
 }
 func BenchmarkPat_GPlusAll(b *testing.B) {
 	benchRoutes(b, gplusPat, gplusAPI)

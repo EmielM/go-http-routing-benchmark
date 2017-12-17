@@ -25,6 +25,7 @@ import (
 	// "github.com/daryl/zeus"
 	"github.com/dimfeld/httptreemux"
 	"github.com/emicklei/go-restful"
+	"github.com/emielm/mux2"
 	"github.com/gin-gonic/gin"
 	"github.com/go-macaron/macaron"
 	"github.com/go-martini/martini"
@@ -345,7 +346,7 @@ func echoHandlerTest(c echo.Context) error {
 
 func loadEcho(routes []route) http.Handler {
 	var h echo.HandlerFunc = echoHandler
-	if loadTestHandler { 
+	if loadTestHandler {
 		h = echoHandlerTest
 	}
 
@@ -1018,6 +1019,54 @@ func loadMartiniSingle(method, path string, handler interface{}) http.Handler {
 	martini := martini.New()
 	martini.Action(router.Handle)
 	return martini
+}
+
+// mux2
+func mux2Handler() {}
+
+func mux2HandlerWrite(w http.ResponseWriter, r *http.Request) {
+	io.WriteString(w, mux2.Param(r, "name"))
+}
+
+func loadMux2(routes []route) http.Handler {
+	h := http.HandlerFunc(httpHandlerFunc)
+	if loadTestHandler {
+		h = http.HandlerFunc(httpHandlerFuncTest)
+	}
+
+	m := mux2.New()
+	for _, route := range routes {
+		switch route.method {
+		case "GET":
+			m.Get(route.path, h)
+		case "POST":
+			m.Post(route.path, h)
+		case "PUT":
+			m.Put(route.path, h)
+		case "DELETE":
+			m.Delete(route.path, h)
+		default:
+			panic("Unknow HTTP method: " + route.method)
+		}
+	}
+	return m
+}
+
+func loadMux2Single(method, path string, handler http.Handler) http.Handler {
+	m := mux2.New()
+	switch method {
+	case "GET":
+		m.Get(path, handler)
+	case "POST":
+		m.Post(path, handler)
+	case "PUT":
+		m.Put(path, handler)
+	case "DELETE":
+		m.Delete(path, handler)
+	default:
+		panic("Unknow HTTP method: " + method)
+	}
+	return m
 }
 
 // pat
